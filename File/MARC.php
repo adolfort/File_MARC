@@ -281,7 +281,11 @@ class File_MARC extends File_MARCBASE
         $marc->setLeader(substr($text, 0, File_MARC::LEADER_LEN));
 
         // bytes 12 - 16 of leader give offset to the body of the record
-        $data_start = 0 + substr($text, 12, 5);
+        if(is_numeric(substr($text, 12, 5))) {
+            $data_start = 0 + substr($text, 12, 5);
+        }else{
+            $data_start = 0;
+        }
 
         // immediately after the leader comes the directory (no separator)
         $dir = substr($text, File_MARC::LEADER_LEN, $data_start - File_MARC::LEADER_LEN - 1);  // -1 to allow for \x1e at end of directory
